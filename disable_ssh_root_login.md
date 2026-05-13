@@ -8,8 +8,8 @@ Direct root login is a major security vulnerability. By disabling it, attackers 
 
 ## ⚙️ Target Infrastructure
 
-- **OS:** Linux (RHEL/CentOS, Debian/Ubuntu)
-- **Service:** OpenSSH Server Daemon (`sshd`)
+*   **OS:** Linux (RHEL/CentOS, Debian/Ubuntu)
+*   **Service:** OpenSSH Server Daemon (`sshd`)
 
 ## 🛠️ Execution Steps
 
@@ -27,38 +27,33 @@ The configuration file that controls the SSH daemon is located at `/etc/ssh/sshd
 
 *(Note: Do not confuse this with `ssh_config`, which configures outbound client connections.)*
 
-Open the file using a text editor with sudo privileges:
+Open the file using a text editor with `sudo` privileges:
 
 ```bash
 sudo vi /etc/ssh/sshd_config
 ```
 
-*(Or use nano if preferred: `sudo nano /etc/ssh/sshd_config`)*
-
 ### 3. Modify the PermitRootLogin Directive
 
 Locate the `PermitRootLogin` parameter within the file.
-
-- If it is set to `yes`, change it to `no`.
-- If it is commented out (starts with a `#`), remove the `#` and ensure it is set to `no`.
+*   If it is set to `yes`, change it to `no`.
+*   If it is commented out (starts with a `#`), remove the `#` and ensure it is set to `no`.
 
 **Before:**
-
-```text
+```ini
 #PermitRootLogin yes
 ```
 
 **After:**
-
-```text
+```ini
 PermitRootLogin no
 ```
 
-Save the file and exit the text editor.
+Save the file and exit the text editor (`:wq`).
 
 ### 4. Verify Configuration Syntax (SRE Best Practice)
 
-Before restarting the service, always test the configuration file for syntax errors to ensure you don't accidentally lock everyone out of the server.
+Before restarting the service, always test the configuration file for syntax errors to ensure you don't accidentally break the SSH daemon and lock everyone out of the server.
 
 ```bash
 sudo sshd -t
@@ -71,13 +66,11 @@ If the command returns no output, the syntax is perfectly valid.
 The running `sshd` process must be restarted to read the updated configuration file from disk. Restarting the service will not drop your current active SSH session.
 
 **For RHEL/CentOS/Amazon Linux:**
-
 ```bash
 sudo systemctl restart sshd
 ```
 
 **For Debian/Ubuntu:**
-
 ```bash
 sudo systemctl restart ssh
 ```
@@ -91,3 +84,16 @@ ssh root@<server-hostname-or-ip>
 ```
 
 The connection should be actively refused or prompt for a password that will never be accepted, confirming the security boundary is active.
+
+## 🔐 Security Best Practices
+
+*   **Key-Based Authentication:** After disabling root login, ensure all standard users authenticate via ED25519 or RSA SSH keys rather than passwords by eventually setting `PasswordAuthentication no`.
+*   **Audit Sudoers:** Since users now rely on `sudo` for elevated privileges, regularly audit the `/etc/sudoers` file to enforce the Principle of Least Privilege.
+
+## 🐛 Troubleshooting
+
+*   **Problem:** `sudo systemctl restart sshd` fails or hangs.
+*   **Solutions:** You likely introduced a syntax error in `/etc/ssh/sshd_config`.
+    *   Do **NOT** close your current SSH session (or you will be permanently locked out).
+    *   Run `sudo sshd -t` to identify the exact line number causing the syntax error.
+    *   Re-open the file, fix the typo, and restart the service again.
