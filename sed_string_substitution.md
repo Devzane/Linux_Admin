@@ -106,3 +106,20 @@ Output should be completely empty.
 - **Forgetting the `-i` flag:** Running `sed 's/old/new/g' config.txt` will print the modified text to your screen, but the actual file remains completely unchanged.
 - **Forgetting the `g` flag:** If "Random" appears twice on line 4, omitting `g` means only the first instance is replaced.
 - **Partial Word Matches:** `sed -i 's/Port/Cloud/g'` will accidentally turn the word "Portal" into "Cloudal". Use word boundaries (`\b`) to strictly match isolated words: `sed -i 's/\bPort\b/Cloud/g'`.
+
+---
+
+## ⚡ QUICK REFERENCE
+
+| Task | Command Pattern |
+|---|---|
+| Basic Replace | `sed -i 's/OLD/NEW/g' filename` |
+| Safe Replace (Backup) | `sed -i.bak 's/OLD/NEW/g' filename` |
+| Replace Paths | `sed -i 's#/old/dir#/new/dir#g' filename` |
+| Exact Word Match | `sed -i 's/\bOLD\b/NEW/g' filename` |
+
+## 🔗 RELATED CONCEPTS
+
+- **Regular Expressions (Regex):** Advanced pattern matching within `sed`.
+- **Awk:** For manipulating columnar data and fields.
+- **Environment Variable Injection:** `envsubst` for replacing variables in templates.
