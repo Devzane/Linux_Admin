@@ -1,9 +1,9 @@
----
 **Topic:** Non-Interactive Text Substitution using `sed`
 **Category:** Linux / DevOps / Cloud Engineering
 **Difficulty:** Intermediate
 **Last Updated:** May 2026
 **Related SOPs:** Bash Scripting Basics, Automated Container Configuration
+
 ---
 
 # SOP: Automated String Substitution in Configuration Files
