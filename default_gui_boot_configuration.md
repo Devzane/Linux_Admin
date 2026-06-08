@@ -1,15 +1,8 @@
----
-**Topic:** Default GUI Boot Configuration (Systemd Targets)
-**Category:** Linux System Administration
-**Difficulty:** Beginner
-**Last Updated:** June 7, 2026
-**Related SOPs:** SSH Access Management, Systemctl Service Management
----
-
 # SOP: Configuring Default GUI Boot via Systemd
 
 ## 📝 1. OBJECTIVE (The "Why")
 **Objective:** To change the default boot state (runlevel) of a Linux server to automatically load the Graphical User Interface (GUI) upon its next startup, without interrupting currently running services.
+
 **Context:** The deployment of new tools on the Stratos Datacenter App Servers requires graphical access. By modifying the `systemd` default target from `multi-user.target` (CLI) to `graphical.target` (GUI), we prepare the servers for graphical access upon their next scheduled maintenance reboot, while ensuring zero downtime today.
 
 ---
